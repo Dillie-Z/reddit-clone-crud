@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="redditApp">
+
+<head>
+    <meta charset="utf-8">
+    <title>Reddit Clone - CRUD</title>
+    <!-- JQuerry -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <!-- JS -->
+    <script src="./js/app.js"></script>
+    <!-- Controllers -->
+    <script src="./js/controller.js"></script>
+    <!-- Services -->
+    <script src="./js/services.js"></script>
+    <!-- Angular Routes -->
+    <script src="./js/routes.js"></script>
+    <!-- Moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css" media="screen">
+</head>
+
+<body>
+    <header ng-controller="nav">
+        <ul id="dropdown1" class="dropdown-content">
+            <li ng-repeat="sort in sortValues">
+                <a href="#!" ng-click="sortBy(sortValues.indexOf(sort))">{{sort}}</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper z-depth-3">
+                <a href="#!" class="brand-logo">Reddit Clone</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a ng-click="newPostForm()"> &#43; Add Post</a></li>
+                    <li>
+                      <form>
+                          <div class="input-field">
+                              <input id="search" type="search" ng-model="search" required>
+                              <label for="search"><i class="material-icons">Search</i></label>
+                              <i class="material-icons">close</i>
+                          </div>
+                      </form>
+                    </li>
+                    <li><a ng-click="ascDsc()">order of </a></li>
+                    <li><a class="dropdown-button" href="#" data-activates="dropdown1">Sort By: {{currentSort}}<i class="material-icons right"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div ng-view></div>
+    </main>
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Reddit Clone - CRUD</h5>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Home</a></li>
+                        <li><a class="grey-text text-lighten-3" ng-click="signUpForm()" href="#/">Sign-Up</a></li>
+                        <li><a class="grey-text text-lighten-3" ng-click="loginForm()" href="#/">Log-In</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!" ng-click="logoutUser()">Log-Out</a></li>
+                        <!-- make sure to add the ng-hide or ng-show to only show the login or the logout depending on if the user is logged in. -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2016 Copyright Text
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

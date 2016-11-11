@@ -1,0 +1,240 @@
+<div class="row" ng-hide="loginVisible !== true">
+    <form ng-submit="loginUser(user)">
+      <div class="row">
+        <div class="input-field col l8 m10 s12 offset-l2 offset-m1">
+          <input id="email" type="email" name="email" ng-model="user.email" class="validate" required>
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col l8 m10 s12 offset-l2 offset-m1">
+          <input id="password" type="password" name="password" ng-model="user.password" class="validate" required>
+          <label for="password" data-error="Please Enter a valid Password.">Password</label>
+        </div>
+      </div>
+      <div class="section">
+        <div class="center-align">
+            <button type="submit" class="btn btn-warning btn-lg">Login</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<div class="row post" ng-hide="signUpVisible !== true">
+    <form ng-submit="signUpUser(newUser)">
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="First Name" name="firstName" ng-model="newUser.firstName" id="first_name" type="text" class="validate" pattern="^[_A-z]{1,30}$" required>
+                <label for="firstName" data-error="Letters only, and a max of 30 Characters">First Name</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="lastName" name="lastName" type="text" ng-model="newUser.lastName" class="validate" pattern="^[_A-z]{1,30}$" required>
+                <label for="lastName" data-error="Letters only, and a max of 30 Characters">Last Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="email" type="email" ng-model="newUser.email" name="email" class="validate" required>
+                <label for="email" data-error="Please Enter a Valid Email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="password" type="password" name="password" ng-model="newUser.password" class="validate" pattern=".{8,}" required>
+                <label for="password" data-error="Password must be at least 8 characters long.">Password</label>
+            </div>
+        </div>
+        <div class="section">
+            <div class="center-align">
+                <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container">
+    <form ng-submit="mc.addPost(newPost)" ng-hide="newPostFormVisible !== true" class="fade post">
+        <div class="row forumBorder">
+            <div class="col s12 m10 l10 offset-l1 offset-m1 ">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Title" ng-model="newPost.title" id="title" name="title" type="text" class="validate" required>
+                        <label for="title">Title</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col l12 m12 s12">
+                        <textarea placeholder="Post" ng-model="newPost.post" id="post" name="post" type="text" class="materialize-textarea validate" required></textarea>
+                        <label for="post">Post</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col l12 m12 s12">
+                        <input placeholder="Img URL" ng-model="newPost.img" id="img" name="img" type="text" class="materialize-textarea validate">
+                        <label for="img">IMG URL</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="section">
+                        <div class="center-align input-field">
+                            <button type="submit" class="btn btn-warning btn-lg">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="section">
+    <div class="row">
+        <div class="col s12 m10 l10 offset-m1 offset-l1 center-align">
+            <div class="row">
+                <div class="col s12 m12 l12 genre-box" ng-repeat="post in mc.posts | orderBy: currentSort : reverse | filter: search">
+                    <div class="row forumBorder z-depth-3 post">
+                        <div class="col s12 m4 l4 left">
+                            <img src="{{post.imgUrl}}" alt="" class="forumImg"/>
+                        </div>
+                        <div class="col s12 m8 l8">
+                            <div class="row">
+                                <div class="col s12 m12 l12">
+                                    <div class="row">
+                                        <div class="col s12 m12 l12">
+                                            <h5 class="post-h4">{{post.title}} | <a  class="negVote" ng-click="mc.downVote(post)">&darr;</a><a  class="posVote" ng-click="mc.upVote(post)">&uarr;</a>    <span ng-class="{posVote: post.votes > 0, negVote: post.votes < 0}">{{post.votes}}</span></h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12">
+                                            <h6 class="right-align">By: {{post.author}}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12">
+                                            <p class="left-align">
+                                                {{post.post}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12">
+                                            <p>
+                                                <span>&#x1f4c5; {{post.date}} | &#x1f4ac; </span>
+                                                <ng-pluralize ng-click="mc.viewComments(post)" count="post.allComments.length" when="{0:'No Comments',1: '1 Comment', 'other': '{{ post.allComments.length }} Comments'}"></ng-pluralize>
+                                                |
+                                                <span ng-click="mc.viewCommentsForm(post)">&#9998; Add Comment</span> |
+                                                <span ng-class="{posVote: post.favorite === true, negVote: post.favorite === false}" ng-click="addFavorite(post)" class="favIcon"> &#402;</span>avorite
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col s12 m12 l12">
+                                        <div class="center-align">
+                                            <button ng-click="mc.viewPostEditForm(post)" class="btn btn-warning btn-lg">Edit</button>
+                                        </div>
+                                        <div class="center-align">
+                                            <button ng-click="mc.deletePost(post)" class="btn btn-warning btn-lg">Delete</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m10 l10 offset-l1 offset-m1 comment" ng-hide="post.commentsFormVisible !== true">
+                                <div class="forumBorder">
+                                    <form class="newComment fade" ng-submit="mc.addComment(post,newComment)">
+                                        <div class="row">
+                                            <div class="input-field col l12 m12 s12">
+                                                <textarea placeholder="Text" ng-model="newComment.text" id="text" name="text" type="text" class="materialize-textarea validate" required></textarea>
+                                                <label for="text">Text</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="section">
+                                                <div class="center-align input-field">
+                                                    <button type="submit" class="btn btn-warning btn-lg">Add</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <ul>
+                                <div class="col s12 m10 l10 offset-l1 offset-m1 commentH" ng-hide="post.commentsVisible !== true">
+                                    <li class="forumBorder z-depth-2" ng-repeat="comment in post.allComments">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12">
+                                                <p>
+                                                    By: {{comment.author}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m12 l12">
+                                                <p>
+                                                    {{comment.comment}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="center-align input-field">
+                                            <button ng-click="mc.viewCommentsEditForm(comment)" class="btn btn-warning btn-lg">Edit</button>
+                                        </div>
+                                        <div class="center-align">
+                                            <button ng-click="mc.deleteComment(comment)" class="btn btn-warning btn-lg">Delete</button>
+                                        </div>
+                                        <div class="col s12 m10 l10 offset-l1 offset-m1 comment" ng-hide="comment.commentsEditFormVisible !== true">
+                                            <div class="forumBorder">
+                                                <form class="newComment fade" ng-submit="mc.editComment(comment,editComment)">
+                                                    <div class="row">
+                                                        <div class="input-field col l12 m12 s12">
+                                                            <textarea placeholder="Text" ng-model="editComment.text" id="text" name="text" type="text" class="materialize-textarea validate" required></textarea>
+                                                            <label for="text">Text</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="section">
+                                                            <div class="center-align input-field">
+                                                                <button type="submit" class="btn btn-warning btn-lg">Edit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <form ng-submit="mc.editPost(post,editPost)" ng-hide="post.postEditFormVisible !== true" class="fade post">
+                        <div class="row forumBorder">
+                            <div class="col s12 m10 l10 offset-l1 offset-m1 ">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input placeholder="Title" ng-model="editPost.title" id="title" name="title" type="text" class="validate" required>
+                                        <label for="title">Title</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l12 m12 s12">
+                                        <textarea placeholder="Post" ng-model="editPost.post" id="post" name="post" type="text" class="materialize-textarea validate" required></textarea>
+                                        <label for="post">Post</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l12 m12 s12">
+                                        <input placeholder="Img URL" ng-model="editPost.img" id="img" name="img" type="text" class="materialize-textarea validate">
+                                        <label for="img">IMG URL</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="section">
+                                        <div class="center-align input-field">
+                                            <button type="submit" class="btn btn-warning btn-lg">Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

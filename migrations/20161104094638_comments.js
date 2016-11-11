@@ -1,0 +1,16 @@
+
+exports.up = function(knex, Promise) {
+  return knex.schema.createTable('comments', (table)=>{
+    table.increments();
+    table.string('author');
+    table.text('comment').notNullable().defaultTo('');
+    table.boolean('commentsEditFormVisible').notNullable().defaultTo(false);
+    table.integer('user_id').references('id').inTable('users').onDelete('CASCADE').index();
+    table.integer('post_id').references('id').inTable('posts').onDelete('CASCADE').index();
+    table.timestamps(true,true);
+  });
+};
+
+exports.down = function(knex, Promise) {
+  return knex.schema.dropTable('comments');
+};
